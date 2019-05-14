@@ -1,0 +1,36 @@
+[server]
+Port = 8080
+
+[log]
+Enable = 0
+Path = ./runtime/log/gin.log
+
+[database]
+Type = mysql
+User = root
+Password = root
+Host = 127.0.0.1
+Db = card-admin
+TablePrefix =
+# 空闲连接数
+MaxIdle = 10
+# 最大连接数
+MaxOpen = 100
+
+#redis缓存
+[redis_cache]
+Host =
+Password =
+DB = 0
+
+#腾讯验证码
+[tencent_captcha]
+Aid =
+AppSecretKey =
+
+#阿里云短信
+[ali_sms]
+AccessId =
+SecretKey =
+SignName =
+DefaultTemplateCode =
