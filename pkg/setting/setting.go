@@ -4,21 +4,23 @@ import (
 	"log"
 	"github.com/go-ini/ini"
 	"flag"
+	"time"
 )
 
 var Setting = SettingConf{}
 
 type SettingConf struct {
-	Database   DatabaseIni
-	Server     ServerIni
-	RedisCache RedisCacheIni
-	Captcha    TencentCaptchaIni
-	AliSms     AliSmsIni
-	Log        GinLogIni
+	Database DatabaseIni
+	Server   ServerIni
+	Redis    RedisIni
+	Captcha  TencentCaptchaIni
+	AliSms   AliSmsIni
+	Log      GinLogIni
 }
 
 type ServerIni struct {
 	Port string
+	Mode string
 }
 
 type DatabaseIni struct {
@@ -32,10 +34,13 @@ type DatabaseIni struct {
 	MaxOpen     int
 }
 
-type RedisCacheIni struct {
-	Host     string
-	Password string
-	DB       int
+type RedisIni struct {
+	Host        string
+	Password    string
+	DB          int
+	MaxIdle     int
+	MaxActive   int
+	IdleTimeout time.Duration
 }
 
 type TencentCaptchaIni struct {
@@ -100,15 +105,15 @@ func loadServerIni(cfg *ini.File) {
 
 //载入Redis缓存配置
 func loadRedisCacheIni(cfg *ini.File) {
-	sec, err := cfg.GetSection("redis_cache")
+	sec, err := cfg.GetSection("redis")
 	if err != nil {
 		log.Fatalf("Fail to get section 'redis_cache': %v", err)
 	}
-	var iniData RedisCacheIni
+	var iniData RedisIni
 	if sec.MapTo(&iniData) != nil {
 		log.Fatalf("Fail to Struct redis_cache config")
 	}
-	Setting.RedisCache = iniData
+	Setting.Redis = iniData
 }
 
 //载入腾讯验证码配置

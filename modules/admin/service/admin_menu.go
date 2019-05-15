@@ -6,6 +6,7 @@ import (
 	"gin-modules/modules/admin/model"
 	"encoding/json"
 	"strconv"
+	"gin-modules/pkg/redis"
 )
 
 type MenuMate struct {
@@ -32,7 +33,7 @@ type Menus struct {
 func ClearMenuCache() bool {
 	cacheKey := "card_admin_menu_list"
 	cacheTreeKey := "card_admin_menu_tree"
-	if redisCache.Delete(cacheKey) != nil || redisCache.Delete(cacheTreeKey) != nil {
+	if !pkg_redis.Delete(cacheKey) || !pkg_redis.Delete(cacheTreeKey) {
 		return false
 	}
 	return true
@@ -41,7 +42,7 @@ func ClearMenuCache() bool {
 //获取菜单树的redis缓存数据
 func GetMenuTree() ([]interface{}, error) {
 	cacheKey := "card_admin_menu_tree"
-	menuCache, err := redisCache.Get(cacheKey)
+	menuCache, err := pkg_redis.Get(cacheKey)
 	if err != nil {
 		return nil, errors.New("获取菜单树失败")
 	}
@@ -54,7 +55,7 @@ func GetMenuTree() ([]interface{}, error) {
 func GetMenuList() ([]interface{}, error) {
 	cacheKey := "card_admin_menu_list"
 	cacheTreeKey := "card_admin_menu_tree"
-	menuCache, err := redisCache.Get(cacheKey)
+	menuCache, err := pkg_redis.Get(cacheKey)
 	if err == nil {
 		var menuCacheRet []interface{}
 		json.Unmarshal([]byte(menuCache), &menuCacheRet)
@@ -234,11 +235,11 @@ func GetMenuList() ([]interface{}, error) {
 	}
 	menuListJson, err := json.Marshal(menuList)
 	menuTreeJson, err := json.Marshal(menuTree)
-	err = redisCache.Set(cacheKey, menuListJson, 0)
+	err = pkg_redis.Set(cacheKey, menuListJson, 0)
 	if err != nil {
 		print(err.Error())
 	}
-	err = redisCache.Set(cacheTreeKey, menuTreeJson, 0)
+	err = pkg_redis.Set(cacheTreeKey, menuTreeJson, 0)
 	if err != nil {
 		print(err.Error())
 	}
@@ -248,7 +249,7 @@ func GetMenuList() ([]interface{}, error) {
 //通过权限ID获取到指定权限的菜单列表
 func GetMyRoleMenu(roleId int) ([]map[string]interface{}, error) {
 	cacheKey := "card_admin_role::" + strconv.Itoa(roleId)
-	menuCache, err := redisCache.Get(cacheKey)
+	menuCache, err := pkg_redis.Get(cacheKey)
 	if err == nil {
 		var menuCacheRet []map[string]interface{}
 		json.Unmarshal([]byte(menuCache), &menuCacheRet)
@@ -345,7 +346,7 @@ func GetMyRoleMenu(roleId int) ([]map[string]interface{}, error) {
 		menuList = append(menuList, masterMenu)
 	}
 	menuListJson, err := json.Marshal(menuList)
-	err = redisCache.Set(cacheKey, menuListJson, 0)
+	err = pkg_redis.Set(cacheKey, menuListJson, 0)
 	if err != nil {
 		print(err.Error())
 	}

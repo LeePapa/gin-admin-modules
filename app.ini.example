@@ -1,8 +1,12 @@
 [server]
 Port = 8080
+#运行模式：debug release
+Mode = debug
 
 [log]
+#是否开始日志打印：0关闭 1开启
 Enable = 0
+#如果启动命令设置了log参数，则优先使用启动命令的log路径
 Path = ./runtime/log/gin.log
 
 [database]
@@ -17,11 +21,12 @@ MaxIdle = 10
 # 最大连接数
 MaxOpen = 100
 
-#redis缓存
-[redis_cache]
+[redis]
 Host =
 Password =
-DB = 0
+MaxIdle = 30
+MaxActive = 30
+IdleTimeout = 200
 
 #腾讯验证码
 [tencent_captcha]

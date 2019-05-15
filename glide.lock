@@ -1,5 +1,5 @@
-hash: af6c2c6d31c6776d650042b5c01cefcd0ff2b6852f2aeeb854abcfdba3028f7c
-updated: 2019-05-14T16:40:37.898111+08:00
+hash: 025792bc95a4580eb9430f8f836670b5076c1925b8f8b14379d99bb2288f1522
+updated: 2019-05-15T10:15:48.636598+08:00
 imports:
 - name: gin-modules/middleware
   version: ""
@@ -41,21 +41,17 @@ imports:
   - render
 - name: github.com/go-ini/ini
   version: c85607071cf08ca1adaf48319cd1aa322e81d8c1
-- name: github.com/go-redis/redis
-  version: d22fde8721cc915a55aeb6b00944a76a92bfeb6e
-  subpackages:
-  - internal
-  - internal/consistenthash
-  - internal/hashtag
-  - internal/pool
-  - internal/proto
-  - internal/util
 - name: github.com/go-sql-driver/mysql
   version: 72cd26f257d44c1114970e19afddcd812016007e
 - name: github.com/golang/protobuf
   version: e91709a02e0e8ff8b86b7aa913fdc9ae9498e825
   subpackages:
   - proto
+- name: github.com/gomodule/redigo
+  version: 9c11da706d9b7902c6da69c592f75637793fe121
+  subpackages:
+  - internal
+  - redis
 - name: github.com/google/uuid
   version: c2e93f3ae59f2904160ceaab466009f965df46d6
 - name: github.com/guregu/null
@@ -88,7 +84,7 @@ imports:
   subpackages:
   - codec
 - name: google.golang.org/appengine
-  version: 54a98f90d1c46b7731eb8fb305d2a321c30ef610
+  version: 4c25cacc810c02874000e4f7071286a8e96b2515
   repo: https://github.com/golang/appengine
   vcs: git
   subpackages:
