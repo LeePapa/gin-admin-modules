@@ -1,0 +1,8 @@
+[GIN] 2019/05/15 - 10:33:36 | 200 |   94.629132ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:39 | 200 |  114.265635ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:39 | 200 |   98.795501ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:40 | 200 |  101.740105ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:41 | 200 |   93.543938ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:43 | 200 |  109.859495ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:43 | 200 |  105.744445ms |             ::1 | GET      /api/admin/menu/getTree
+[GIN] 2019/05/15 - 10:33:44 | 200 |   95.762406ms |             ::1 | GET      /api/admin/menu/getTree

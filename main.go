@@ -7,10 +7,15 @@ import (
 	"os"
 	"io"
 	"gin-modules/pkg/redis"
+	"gin-modules/pkg/db"
 )
 
 func init() {
+	//公用redis客户端
 	pkg_redis.Setup()
+	//公用db客户端
+	pkg_db.Initialize(setting.Setting.Database)
+	//初始化admin模块的db客户端
 	admin.InitDB(setting.Setting.Database)
 }
 
@@ -22,6 +27,8 @@ func main() {
 		gin.DefaultWriter = io.MultiWriter(f)
 	}
 	r := gin.Default()
+	//初始化admin模块的路由
 	r = admin.InitRouter(r)
+	//启动服务
 	r.Run(":" + setting.Setting.Server.Port)
 }
