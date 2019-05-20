@@ -28,6 +28,7 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 		auth.GET(prx+"/admin/menu/getTree", admin_controller.GetMenuTree)
 		auth.GET(prx+"/admin/menu/getMy", admin_controller.GetMyMenuList)
 		auth.GET(prx+"/admin/menu/detail", admin_controller.GetMenuDetail)
+		auth.POST(prx+"/admin/menu/checkKey", admin_controller.CheckMenuKey)
 		auth.POST(prx+"/admin/menu/save", admin_controller.MenuSave)
 		auth.POST(prx+"/admin/menu/delete", admin_controller.MenuDelete)
 		auth.POST(prx+"/admin/menu/setShow", admin_controller.MenuShow)

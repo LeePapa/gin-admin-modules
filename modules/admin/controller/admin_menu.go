@@ -16,7 +16,7 @@ type menuRule struct {
 	Id     int    `form:"id"`
 	Pid    int    `form:"pid"`
 	Level  int    `form:"level" binding:"required"`
-	Name   string `form:"role_name" binding:"required"`
+	Name   string `form:"name" binding:"required"`
 	Icon   string `form:"icon"`
 	Key    string `form:"key" binding:"required"`
 	Path   string `form:"path" binding:"required"`
@@ -52,14 +52,40 @@ func GetMenuTree(ct *gin.Context) {
 	OutputJson(ct, 200, "success", menu)
 }
 
+//获取菜单详情
 func GetMenuDetail(ct *gin.Context) {
-	id := ct.PostForm("id")
+	id := ct.Query("id")
 	menuInfo, has := admin_model.GetMenuInfo("*", "id = ?", id)
 	if !has {
 		OutputJson(ct, -1, "无法获取到菜单信息", struct{}{})
 		return
 	}
+	_, has = admin_model.GetMenuByOrder("id,`sort`", "`sort` ASC", "pid = ? AND `sort` > ? AND is_del = ?", menuInfo.Pid, menuInfo.Sort, 0)
+	if !has {
+		menuInfo.Sort = 1
+	}
+	_, has = admin_model.GetMenuByOrder("id,`sort`", "`sort` DESC", "pid = ? AND `sort` < ? AND is_del = ?", menuInfo.Pid, menuInfo.Sort, 0)
+	if !has {
+		if menuInfo.Sort == 1 {
+			menuInfo.Sort = 0
+		} else {
+			menuInfo.Sort = -1
+		}
+	}
+
 	OutputJson(ct, 200, "success", menuInfo)
+}
+
+//校验菜单的key
+func CheckMenuKey(ct *gin.Context) {
+	key := ct.PostForm("key")
+	print(key)
+	_, has := admin_model.GetMenuInfo("id", "`key` = ? AND is_del = ?", key, 0)
+	if has {
+		OutputJson(ct, -1, "菜单唯一标识已经存在", struct{}{})
+		return
+	}
+	OutputJson(ct, 200, "success", struct{}{})
 }
 
 //菜单保存操作
@@ -69,7 +95,12 @@ func MenuSave(ct *gin.Context) {
 		OutputJson(ct, -1, "参数异常", struct{}{})
 		return
 	}
+	menuInfo, has := admin_model.GetMenuInfo("id", "`key` = ? AND is_del = ?", rule.Key, 0)
 	if rule.Id != 0 {
+		if has && menuInfo.ID != rule.Id {
+			OutputJson(ct, -1, "菜单唯一标识已经存在", struct{}{})
+			return
+		}
 		if !admin_model.UpdateMenu(map[string]interface{}{
 			"pid":    rule.Pid,
 			"level":  rule.Level,
@@ -85,6 +116,10 @@ func MenuSave(ct *gin.Context) {
 		admin_service.ClearMenuCache()
 		go admin_service.GetMenuList()
 		OutputJson(ct, 200, "菜单更新成功", struct{}{})
+		return
+	}
+	if has {
+		OutputJson(ct, -1, "菜单唯一标识已经存在", struct{}{})
 		return
 	}
 	id := admin_model.AddMenuBySort(admin_model.AdminMenu{
@@ -115,7 +150,7 @@ func MenuSortSet(ct *gin.Context) {
 		return
 	}
 	if operateType == "up" {
-		upMenuInfo, has := admin_model.GetMenuByOrder("id,`sort`", "`sort` ASC", "pid = ? AND `sort` > ?", menuInfo.Pid, menuInfo.Sort)
+		upMenuInfo, has := admin_model.GetMenuByOrder("id,`sort`", "`sort` ASC", "pid = ? AND `sort` > ? AND is_del = ?", menuInfo.Pid, menuInfo.Sort, 0)
 		if !has {
 			OutputJson(ct, -1, "菜单已到上限位置，无法移动", struct{}{})
 			return
@@ -130,7 +165,7 @@ func MenuSortSet(ct *gin.Context) {
 		OutputJson(ct, -1, "菜单位置更新失败", struct{}{})
 		return
 	} else {
-		downMenuInfo, has := admin_model.GetMenuByOrder("id,`sort`", "`sort` DESC", "pid = ? AND `sort` < ?", menuInfo.Pid, menuInfo.Sort)
+		downMenuInfo, has := admin_model.GetMenuByOrder("id,`sort`", "`sort` DESC", "pid = ? AND `sort` < ? AND is_del = ?", menuInfo.Pid, menuInfo.Sort, 0)
 		if !has {
 			OutputJson(ct, -1, "菜单已到下限位置，无法移动", struct{}{})
 			return
@@ -157,6 +192,8 @@ func MenuDelete(ct *gin.Context) {
 	if !admin_model.UpdateMenu(map[string]interface{}{"is_del": 1}, "id = ?", id) {
 		OutputJson(ct, -1, "菜单删除失败", struct{}{})
 	}
+	admin_service.ClearMenuCache()
+	go admin_service.GetMenuList()
 	OutputJson(ct, 200, "菜单删除成功", struct{}{})
 }
 

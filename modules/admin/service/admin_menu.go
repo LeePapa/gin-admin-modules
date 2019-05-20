@@ -17,11 +17,13 @@ type MenuMate struct {
 	Target     string   `json:"target"`
 }
 type ChildMenu struct {
+	Id   int      `json:"id"`
 	Meta MenuMate `json:"meta"`
 	Name string   `json:"name"`
 	Path string   `json:"path"`
 }
 type Menus struct {
+	Id       int           `json:"id"`
 	Children []interface{} `json:"children"`
 	Meta     MenuMate      `json:"meta"`
 	Name     string        `json:"name"`
@@ -83,8 +85,7 @@ func GetMenuList() ([]interface{}, error) {
 	}
 	var menuList []interface{}
 	var menuTree []map[string]interface{}
-	masterMaxIndex := len(menus)
-	for masterIndex, menu := range menus {
+	for _, menu := range menus {
 		subMenus := menuFunc(menu.ID, 2)
 		meta := MenuMate{
 			Title:      menu.Name,
@@ -97,17 +98,24 @@ func GetMenuList() ([]interface{}, error) {
 				meta.Target = "_blank"
 			}
 			menuList = append(menuList, ChildMenu{
+				Id:   menu.ID,
 				Name: menu.Key,
 				Path: menu.Path,
 				Meta: meta,
+			})
+			menuTree = append(menuTree, map[string]interface{}{
+				"id":       menu.ID,
+				"icon":     menu.Icon,
+				"key":      menu.Key,
+				"title":    menu.Name,
+				"children": []interface{}{},
 			})
 			continue
 		}
 		var childMenu []interface{}
 		var childrenMenuTree []map[string]interface{}
 		var menuRedirect string
-		subMaxIndex := len(subMenus)
-		for subIndex, subMenu := range subMenus {
+		for _, subMenu := range subMenus {
 			if menuRedirect == "" {
 				menuRedirect = subMenu.Path
 			}
@@ -123,31 +131,23 @@ func GetMenuList() ([]interface{}, error) {
 					subMeta.Target = "_blank"
 				}
 				childMenu = append(childMenu, ChildMenu{
+					Id:   subMenu.ID,
 					Meta: subMeta,
 					Name: subMenu.Key,
 					Path: subMenu.Path,
 				})
-				sort := subMenu.Sort
-				if subIndex == 0 {
-					sort = 0
-				} else if subIndex == subMaxIndex-1 {
-					sort = -1
-				}
-				print("subIndex:", subIndex, "p:", subMaxIndex, "，", "sort:", sort, "\n")
 				childrenMenuTree = append(childrenMenuTree, map[string]interface{}{
+					"id":    subMenu.ID,
 					"icon":  subMenu.Icon,
 					"key":   subMenu.Key,
 					"title": subMenu.Name,
-					"level": subMenu.Level,
-					"sort":  sort,
 				})
 				continue
 			}
 			var childMenuItem []interface{}
 			var childMenuItemTree []map[string]interface{}
 			var subRedirect string
-			itemMaxIndex := len(menuItem)
-			for itemIndex, subMenuItem := range menuItem {
+			for _, subMenuItem := range menuItem {
 				if subRedirect == "" {
 					subRedirect = subMenuItem.Path
 				}
@@ -161,45 +161,31 @@ func GetMenuList() ([]interface{}, error) {
 					itemMeta.Target = "_blank"
 				}
 				childMenuItem = append(childMenuItem, ChildMenu{
+					Id:   subMenuItem.ID,
 					Meta: itemMeta,
 					Name: subMenuItem.Key,
 					Path: subMenuItem.Path,
 				})
-				sort := subMenuItem.Sort
-				if itemIndex == 0 {
-					sort = 0
-				} else if itemIndex == itemMaxIndex-1 {
-					sort = -1
-				}
-				print("itemIndex:", itemIndex, "p:", itemMaxIndex, "，", "sort:", sort, "\n")
 				childMenuItemTree = append(childMenuItemTree, map[string]interface{}{
+					"id":    subMenuItem.ID,
 					"icon":  subMenuItem.Icon,
 					"key":   subMenuItem.Key,
 					"title": subMenuItem.Name,
-					"level": subMenuItem.Level,
-					"sort":  sort,
 				})
 			}
 			childMenu = append(childMenu, Menus{
+				Id:       subMenu.ID,
 				Meta:     subMeta,
 				Name:     subMenu.Key,
 				Path:     subMenu.Path,
 				Children: childMenuItem,
 				Redirect: subRedirect,
 			})
-			sort := subMenu.Sort
-			if subIndex == 0 {
-				sort = 0
-			} else if subIndex == subMaxIndex-1 {
-				sort = -1
-			}
-			print("subIndex:", subIndex, "p:", subMaxIndex, "，", "sort:", sort, "\n")
 			subRes := map[string]interface{}{
+				"id":    subMenu.ID,
 				"icon":  subMenu.Icon,
 				"key":   subMenu.Key,
 				"title": subMenu.Name,
-				"level": subMenu.Level,
-				"sort":  sort,
 			}
 			if childMenuItemTree != nil {
 				subRes["group"] = true
@@ -208,25 +194,19 @@ func GetMenuList() ([]interface{}, error) {
 			childrenMenuTree = append(childrenMenuTree, subRes)
 		}
 		menuList = append(menuList, Menus{
+			Id:       menu.ID,
 			Name:     menu.Key,
 			Path:     menu.Path,
 			Redirect: menuRedirect,
 			Meta:     meta,
 			Children: childMenu,
 		})
-		sort := menu.Sort
-		if masterIndex == 0 {
-			sort = 0
-		} else if masterIndex == masterMaxIndex-1 {
-			sort = -1
-		}
-		print("masterIndex:", masterIndex, "，p:", masterMaxIndex, "，", "sort:", sort, "\n")
+
 		masterRes := map[string]interface{}{
+			"id":    menu.ID,
 			"icon":  menu.Icon,
 			"key":   menu.Key,
 			"title": menu.Name,
-			"level": menu.Level,
-			"sort":  sort,
 		}
 		if childrenMenuTree != nil {
 			masterRes["children"] = childrenMenuTree
