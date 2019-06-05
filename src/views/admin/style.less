@@ -1,0 +1,74 @@
+@header-height: 64px;
+@sider-width: 180px;
+@min-width: 1200px;
+@copy-right-height: 40px;
+@sider-dark-bg: #495060;
+.layout {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  &-header {
+    display: flex;
+    height: @header-height;
+    line-height: @header-height;
+    flex: 0 0 @header-height;
+    background: #fff;
+    &-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 @sider-width;
+      width: @sider-width;
+      background: @sider-dark-bg;
+      color: #fff;
+      font-size: 20px;
+    }
+    &-main {
+      display: flex;
+      justify-content: flex-end;
+      flex: auto;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+      z-index: 1;
+      padding: 0 5px;
+    }
+  }
+  &-content {
+    display: flex;
+    flex: auto;
+    height: calc(100vh - @header-height);
+  }
+  &-sider {
+    width: @sider-width;
+    flex: 0 0 @sider-width;
+    background: #495060;
+    overflow-y: auto;
+  }
+  &-main-content {
+    flex: auto;
+    overflow: auto;
+    // 主内容都在这个区块里面
+    &-wrap {
+      position: relative;
+      padding: 10px 10px @copy-right-height + 5px;
+      // background-color: #f5f7f9;
+      background-color: #fff;
+      min-height: 100%;
+      min-width: @min-width - @sider-width;
+    }
+  }
+  &-copyright {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: @copy-right-height;
+    line-height: @copy-right-height;
+    text-align: center;
+    background-color: #2a2b33;
+    color: #828285;
+  }
+}
