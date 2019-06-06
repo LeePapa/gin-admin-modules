@@ -16,6 +16,7 @@
 
 <script>
 import AspectBox from '@components/aspect-box'
+
 export default {
   name: 'Index',
   components: {

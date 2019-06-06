@@ -7,14 +7,18 @@ const loginInUrl = '/index.php/admin/User/Login'
 const loginOutUrl = '/index.php/admin/User/LoginOut'
 
 export default {
-  loginIn: (data = {}) => ajax({
-    url: loginInUrl,
-    data: data,
-    method: 'post'
-  }),
-  loginOut: (data = {}) => ajax({
-    url: loginOutUrl,
-    data: data,
-    method: 'post'
-  })
+  loginIn: (data = {}) => {
+    return ajax({
+      url: loginInUrl,
+      data: data,
+      method: 'post'
+    })
+  },
+  loginOut: (data = {}) => {
+    return ajax({
+      url: loginOutUrl,
+      data: data,
+      method: 'post'
+    })
+  }
 }

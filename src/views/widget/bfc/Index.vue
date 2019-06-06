@@ -38,7 +38,7 @@
       </div>
       <div class="center">
         <div class="pp">pp</div>
-    <pre>
+        <pre>
   .center{
     background:lightyellow;
     overflow:hidden;
@@ -64,10 +64,12 @@ export default {
     background-color: #f00;
     border: 5px solid #999;
   }
+
   .test {
     position: relative;
     left: 400px;
   }
+
   .test2 {
     position: relative;
     left: 100px;
@@ -86,16 +88,18 @@ export default {
     }
   }
 
-  .left{
-    background:pink;
+  .left {
+    background: pink;
     float: left;
-    width:180px;
+    width: 180px;
   }
-  .center{
+
+  .center {
     position: relative;
-    background:lightyellow;
-    overflow:hidden;
+    background: lightyellow;
+    overflow: hidden;
   }
+
   .center .pp {
     position: absolute;
     right: 0;
@@ -104,9 +108,10 @@ export default {
     height: 100px;
     background: #2D8CF0;
   }
-  .right{
+
+  .right {
     background: lightblue;
-    width:180px;
-    float:right;
+    width: 180px;
+    float: right;
   }
 </style>

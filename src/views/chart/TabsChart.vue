@@ -19,6 +19,7 @@
 
 <script>
 import HChart from '@components/h-chart'
+
 export default {
   name: 'TabsChart',
   components: {

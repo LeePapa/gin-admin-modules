@@ -12,6 +12,7 @@
 import LayoutHeader from './LayoutHeader'
 import LayoutSider from './LayoutSider'
 import LayoutMain from './LayoutMain'
+
 export default {
   name: 'Index',
   components: {

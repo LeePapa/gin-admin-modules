@@ -16,7 +16,10 @@
 </template>
 
 <script>
+import storage from '@util/storage'
+// import loginApi from '@service/system'
 import { mapState } from 'vuex'
+
 export default {
   name: 'LayoutHeader',
   data () {
@@ -28,20 +31,20 @@ export default {
   computed: {
     ...mapState(['userName'])
   },
-  created () {
-    /* this.$on('global:username', (name) => {
-      this.userName = name
-    }) */
-    /* this.$bus.$on(this.$bus.changeUserName, (name) => {
-      this.userName = name
-    }) */
-  },
   methods: {
     onToggleHeader (name) {
-      this.$emit('update', name)
       if (name === '1') {
-        // this.loginOut()
+        this.loginOut()
       }
+    },
+    loginOut () {
+      storage.setUserName()
+      this.$router.replace('/login')
+      // loginApi.loginOut()
+      //   .then(data => {
+      //     storage.setUserName()
+      //     this.$router.replace('/login')
+      //   })
     }
   }
 }

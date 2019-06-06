@@ -11,6 +11,7 @@ const NotFound = () => import('@views/error/notfound/Index.vue')
 
 // -------账户类
 const Account = () => import('@views/account/Index.vue')
+const Login = (resolve) => require(['@views/account/login/Index.vue'], resolve)
 
 // -------chart
 const Chart = (resolve) => require(['@views/chart/Index.vue'], resolve)
@@ -146,9 +147,18 @@ const routes = [
     ]
   },
   {
-    path: '/account',
-    name: 'Account',
-    component: Account
+    path: '/',
+    component: Account,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        meta: {
+          title: '商家登录'
+        },
+        component: Login
+      }
+    ]
   },
   {
     path: '*',

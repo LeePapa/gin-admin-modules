@@ -19,10 +19,12 @@ export default {
       transform: translate3d(0, -1rem, 0);
     }
   }
+
   .bouncing-loader {
     display: flex;
     justify-content: center;
   }
+
   .bouncing-loader > div {
     width: 1rem;
     height: 1rem;
@@ -31,9 +33,11 @@ export default {
     border-radius: 50%;
     animation: bouncing-loader 0.6s infinite alternate;
   }
+
   .bouncing-loader > div:nth-child(2) {
     animation-delay: 0.2s;
   }
+
   .bouncing-loader > div:nth-child(3) {
     animation-delay: 0.4s;
   }

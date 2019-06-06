@@ -40,6 +40,12 @@ export default {
   setToken (val) {
     this.setLocal(this.keys.token, val)
   },
+  setUserInfo (val) {
+    this.setLocal(this.keys.userInfo, val)
+  },
+  getUserInfo () {
+    return this.getLocal(this.keys.userInfo)
+  },
   getLocal (key) {
     let result = null
     try {

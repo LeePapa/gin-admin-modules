@@ -17,6 +17,7 @@ export default {
       transform: rotate(360deg);
     }
   }
+
   .donut {
     display: inline-block;
     border: 4px solid rgba(0, 0, 0, 0.1);

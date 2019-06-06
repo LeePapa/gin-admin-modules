@@ -17,6 +17,7 @@
 
 <script>
 import HLink from '@components/link'
+
 export default {
   name: 'Index',
   components: {

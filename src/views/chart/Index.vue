@@ -31,6 +31,7 @@ import HLine from './Line.vue'
 import OriginalChart from './OriginalChart.vue'
 import TabsChart from './TabsChart.vue'
 import CalendarChart from './CalendarChart.vue'
+
 export default {
   name: 'Index',
   components: {

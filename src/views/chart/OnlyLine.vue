@@ -6,6 +6,7 @@
 
 <script>
 import HChart from '@components/h-chart'
+
 export default {
   name: 'OnlyLine',
   components: {

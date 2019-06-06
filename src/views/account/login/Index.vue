@@ -43,12 +43,12 @@
       </div>
       <div class="form-item">
         <Input v-model="userName" placeholder="请输入用户名" size="large">
-        <Button slot="prepend" icon="person"></Button>
+        <Button slot="prepend" icon="ios-person"></Button>
         </Input>
       </div>
       <div class="form-item">
         <Input v-model="pwd" type="password" placeholder="请输入密码" size="large">
-        <Button slot="prepend" icon="locked"></Button>
+        <Button slot="prepend" icon="ios-lock"></Button>
         </Input>
       </div>
       <div class="form-item">
@@ -57,19 +57,19 @@
             <Checkbox v-model="rememberMe">近30天自动登录</Checkbox>
           </Col>
           <Col style="font-size: 12px;line-height: 1;">
-            <router-link :to="{path: '/forgetPwd'}">忘记密码?</router-link>
+            <!--<router-link :to="{path: '/forgetPwd'}">忘记密码?</router-link>-->
           </Col>
         </Row>
       </div>
       <Button type="primary" size="large" @click="onLogin" long>登录</Button>
       <div class="register">
-        <router-link :to="{path: '/register'}">注册开店</router-link>
+        <!--<router-link :to="{path: '/register'}">注册</router-link>-->
       </div>
     </div>
   </div>
 </template>
 <script>
-import api from '@service/system'
+// import api from '@service/system'
 import storage from '@util/storage'
 
 export default {
@@ -89,9 +89,11 @@ export default {
       this.rememberMe = account.rememberMe
     }
     // username localStorage作为存储当前用户是否登录过了，只要不点退出按钮就一直处于登录状态，哪怕是重新打开浏览器
-    /* if (storage.getUserName()) {
-     this.$router.replace('/')
-     } */
+    // 这块还是考虑注释掉，由服务器端控制
+    if (storage.getUserName()) {
+      this.$store.commit('updateUserName', { userName: storage.getUserName() })
+      this.$router.replace('/')
+    }
   },
   methods: {
     onLogin () {
@@ -99,22 +101,25 @@ export default {
       if (!userName || !this.pwd) {
         return this.$Message.warning('请输入账号和密码')
       }
-      api.loginIn({ phone: userName, password: this.pwd, type: 'password' })
-        .then(({ data }) => {
-          if (this.rememberMe) {
-            storage.setAccount(JSON.stringify({
-              userName: this.userName,
-              pwd: this.pwd,
-              rememberMe: this.rememberMe
-            }))
-          } else {
-            storage.setAccount()
-          }
-          storage.setUserName(userName)
-          storage.setToken(data.token)
-          storage.setUserInfo(data)
-          this.$router.replace('/')
-        })
+      storage.setUserName(userName)
+      this.$store.commit('updateUserName', { userName })
+      this.$router.replace('/')
+      // api.loginIn({ phone: userName, password: this.pwd, type: 'password' })
+      //   .then(({ data }) => {
+      //     if (this.rememberMe) {
+      //       storage.setAccount(JSON.stringify({
+      //         userName: this.userName,
+      //         pwd: this.pwd,
+      //         rememberMe: this.rememberMe
+      //       }))
+      //     } else {
+      //       storage.setAccount()
+      //     }
+      //     storage.setUserName(userName)
+      //     storage.setToken(data.token)
+      //     storage.setUserInfo(data)
+      //     this.$router.replace('/')
+      //   })
     }
   }
 }
