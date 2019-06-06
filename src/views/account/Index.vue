@@ -22,8 +22,6 @@
   </div>
 </template>
 <style lang="less" scoped>
-  @import "~@base/fn";
-
   @header-height: 80px;
   @bottom-height: 100px;
   .body-wrap {

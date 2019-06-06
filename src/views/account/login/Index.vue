@@ -1,5 +1,4 @@
 <style lang="less" scoped>
-  @import "~@base/fn"; // #1c2438
   .bg {
     padding-top: 10px;
     height: calc(~'100vh - 180px');

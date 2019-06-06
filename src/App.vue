@@ -8,5 +8,5 @@ export default {
 }
 </script>
 
-<style src="./assets/css/index.less" lang="less">
+<style src="./assets/styles/index.less" lang="less">
 </style>

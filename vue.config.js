@@ -6,7 +6,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
-  // lintOnSave: false,
+  lintOnSave: false,
   configureWebpack: {
     resolve: {
       alias: {
@@ -22,6 +22,15 @@ module.exports = {
         '@assets': resolve('src/assets'),
         '@base': resolve('src/assets/css/base')
       }
+    }
+  },
+  pluginOptions: {
+    'style-resources-loader': {
+      patterns: [
+        resolve('src/assets/styles/base/vars.less'),
+        resolve('src/assets/styles/base/mixins.less')
+      ],
+      preProcessor: 'less'
     }
   }
 }
